@@ -7,8 +7,6 @@ ADD ./templates /etc/nginx/templates
 RUN chmod g+rwx /var/cache/nginx /var/run /var/log/nginx
 RUN chgrp -R root /var/cache/nginx
 
-# users are not allowed to listen on priviliged ports
-RUN sed -i.bak 's/listen\(.*\)80;/listen 8080;/' /etc/nginx/conf.d/default.conf
 EXPOSE 8080
 
 # comment user directive as master process is run as user in OpenShift anyhow

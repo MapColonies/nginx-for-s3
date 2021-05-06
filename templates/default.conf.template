@@ -8,11 +8,9 @@ upstream storage_url {
 }
 
 server {
-    listen       8080;
+    listen       8080 default_server;
     
-    server_name  localhost;
-
-    location /3dtiles {
+    location / {
         js_content s3.redirect;
     }
 
