@@ -1,0 +1,36 @@
+js_import conf.d/s3.js;
+
+js_set $s3date s3.now;
+js_set $s3auth s3.auth;
+
+upstream storage_url {
+    server $S3_HOST:$S3_PORT;
+}
+
+server {
+    listen       8080;
+    
+    server_name  localhost;
+
+    location /3dtiles {
+        js_content s3.redirect;
+    }
+
+    location @storage {
+        access_log /var/log/nginx/storage.access.log;
+        proxy_set_header Accept '*/*';
+        proxy_pass_request_headers off;
+        proxy_set_header Authorization $s3auth;
+        proxy_set_header Date $s3date;
+        proxy_set_header content-type '';
+        server_tokens off;
+        types { } default_type '';
+        proxy_pass http://storage_url$uri;
+    }
+
+    # redirect server error pages to the static page /50x.html
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}
