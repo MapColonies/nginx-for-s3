@@ -16,6 +16,16 @@ server {
 
     location @storage {
         access_log /var/log/nginx/storage.access.log;
+
+        if ($request_method = 'OPTIONS') {
+            return 204;
+        }
+
+        add_header Access-Control-Allow-Origin *;
+        add_header Access-Control-Max-Age 3600;
+        add_header Access-Control-Expose-Headers Content-Length;
+        add_header Access-Control-Allow-Headers Range;
+
         proxy_set_header Accept '*/*';
         proxy_pass_request_headers off;
         proxy_set_header Authorization $s3auth;
