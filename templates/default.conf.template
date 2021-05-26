@@ -15,7 +15,6 @@ server {
     }
 
     location @storage {
-        access_log /var/log/nginx/storage.access.log;
 
         if ($request_method = 'OPTIONS') {
             return 204;
