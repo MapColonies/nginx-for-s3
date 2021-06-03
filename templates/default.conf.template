@@ -9,6 +9,11 @@ upstream storage_url {
 
 server {
     listen       8080 default_server;
+
+    location /nginx_status {
+        # Enable Nginx stats
+        stub_status;
+    }
     
     location / {
         js_content s3.redirect;
