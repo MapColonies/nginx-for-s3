@@ -35,3 +35,11 @@ route:
 
   annotations:
     haproxy.router.openshift.io/rewrite-target: "/"
+
+authentication:
+  opa:
+    customHeaderName: 'x-api-key'
+
+ports:
+  opa: 9191
+  envoy: 8000
