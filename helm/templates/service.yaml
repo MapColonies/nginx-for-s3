@@ -1,0 +1,25 @@
+# {{ $targetPort := ternary .Values.ports.envoy 8080 .Values.authentication.opa.enabled }}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name}}-{{ .Chart.Name }}-nginx
+  labels:
+    app: {{ .Chart.Name }}
+    component: nginx-service
+    environment: {{ .Values.environment }}
+    release: {{ .Release.Name }}
+spec:
+  # In case cloudProavider=azure
+  {{- if eq .Values.cloudProvider "azure" }}
+  type: ClusterIP
+  {{- end }}
+  # In case cloudProvider=minikube
+  {{- if eq .Values.cloudProvider "minikube" }}
+  type: NodePort
+  {{- end }}
+  ports:
+    - port: 80
+      # targetPort: 8080
+      # protocol: TCP
+      # name: http
