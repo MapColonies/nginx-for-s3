@@ -1,3 +1,4 @@
+{{ $targetPort := ternary .Values.ports.envoy.port .Values.ports.nginx.nginxTargetPort .Values.authentication.opa.enabled }}
 
 apiVersion: v1
 kind: Service
@@ -8,6 +9,6 @@ spec:
     podName: {{ .Release.Name }}-{{ .Chart.Name }}-pod
   ports:
   - protocol: TCP
-    port: 8080
-    targetPort: {{ .Values.ports.envoy }}
+    port: {{ .Values.ports.nginx.port }}
+    targetPort: {{ .Values.ports.envoy.port }}
   

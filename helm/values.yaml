@@ -38,8 +38,24 @@ route:
 
 authentication:
   opa:
+    enabled: true
     customHeaderName: 'x-api-key'
 
 ports:
-  opa: 9191
-  envoy: 8000
+  deployment: 8080
+  nginx:
+    port: 80
+    nginxTargetPort: 8080
+  opa: 
+    port: 9191
+  envoy: 
+    port: 8081
+
+opa:
+  image: openpolicyagent/opa
+  imageTag: 0.29.4-envoy-3
+
+envoy:
+  image: envoyproxy/envoy
+  imageTag: v1.18.3
+  maxRequestBytes: 8192
