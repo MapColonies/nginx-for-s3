@@ -1,4 +1,4 @@
-{{- define "nginx-for-s3.envoy-container" }}
+{{- define "echo-server.envoy-container" }}
         - name: envoy
           image: envoyproxy/envoy:v1.18.3
           volumeMounts:
@@ -11,7 +11,7 @@
           - "/config/envoy.yaml"
           ports:
             - name: http
-              containerPort: {{ .Values.ports.envoy.port }}
+              containerPort: {{ .Values.ports.envoy }}
               protocol: TCP
             - name: admin
               containerPort: 8001
@@ -30,8 +30,8 @@
           #   periodSeconds: 5
 {{- end }}
 
-{{- define "nginx-for-s3.envoy-volumes" }}
+{{- define "echo-server.envoy-volumes" }}
       - name: proxy-config
         configMap:
-          name: {{ .Release.Name }}-{{ .Chart.Name }}-envoy
+          name: {{ include "echo-server.fullname" . }}-envoy
 {{- end }}
