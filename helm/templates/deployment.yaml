@@ -31,14 +31,12 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 8080
-
         {{- if .Values.authentication.opa.enabled }}
         {{- template "nginx-for-s3.envoy-container" . }}
         {{- template "nginx-for-s3.opa-container" . }}
-        {{- end }}
-
+        {{- end}}
       volumes:
       {{- if .Values.authentication.opa.enabled }}
       {{- template "nginx-for-s3.envoy-volumes" . }}
       {{- template "nginx-for-s3.opa-volumes" . }}
-      {{- end }}
+      {{- end}}

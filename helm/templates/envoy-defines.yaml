@@ -11,23 +11,23 @@
           - "/config/envoy.yaml"
           ports:
             - name: http
-              containerPort: {{ .Values.ports.envoy }}
+              containerPort: {{ .Values.ports.envoy.port }}
               protocol: TCP
             - name: admin
               containerPort: 8001
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /ready
-              port: {{ .Values.ports.envoy }}
-            initialDelaySeconds: 5
-            periodSeconds: 5
-          readinessProbe:
-            httpGet:
-              path: /ready
-              port: {{ .Values.ports.envoy }}
-            initialDelaySeconds: 5
-            periodSeconds: 5
+          # livenessProbe:
+          #   httpGet:
+          #     path: /ready
+          #     port: {{ .Values.ports.envoy }}
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 5
+          # readinessProbe:
+          #   httpGet:
+          #     path: /ready
+          #     port: {{ .Values.ports.envoy }}
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 5
 {{- end }}
 
 {{- define "nginx-for-s3.envoy-volumes" }}

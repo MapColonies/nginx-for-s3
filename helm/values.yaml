@@ -1,22 +1,16 @@
 # Name of the image tu pull from registry
-image: acrarolibotnonprod.azurecr.io/3d-nginx:v1.0.0-rc-profile
+image: acrarolibotnonprod.azurecr.io/nginx-for-s3:v1.1.0
 
 ingress:
   enabled: false
 
   path: "/nginx-for-s3/"
-  host: "*" # "minikube.local"
+  host: "minikube.local"
 
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.org/mergeable-ingress-type: "minion"
     nginx.org/rewrites: "serviceName={{ .Release.Name }}-{{ .Chart.Name }}-service rewrite=/"
-
-route:
-  enabled: true
-
-  annotations:
-    haproxy.router.openshift.io/rewrite-target: "/"
 
 deployment:
   pod:
@@ -36,21 +30,32 @@ s3:
   accessId: "raster"
   secretKey: "rasterPassword"
 
-ports:
-  # s3: 9000
-  opa: 9191
-  envoy: 8000
+route:
+  enabled: true
+
+  annotations:
+    haproxy.router.openshift.io/rewrite-target: "/"
 
 authentication:
   opa:
-    enabled: false
+    enabled: true
     customHeaderName: 'x-api-key'
+
+ports:
+  deployment: 8080
+  nginx:
+    port: 80
+    nginxTargetPort: 8080
+  opa: 
+    port: 9191
+  envoy: 
+    port: 8081
+
+opa:
+  image: openpolicyagent/opa
+  imageTag: 0.29.4-envoy-3
 
 envoy:
   image: envoyproxy/envoy
   imageTag: v1.18.3
   maxRequestBytes: 8192
-
-environment: development
-# cloudProvider is provider where you are going to deploy map exporter, it could be: aws, minikube
-cloudProvider: azure
