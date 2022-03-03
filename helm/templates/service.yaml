@@ -10,5 +10,8 @@ spec:
   ports:
   - protocol: TCP
     port: {{ .Values.ports.nginx.port }}
+    {{ if .Values.authentication.opa.enabled }}
     targetPort: {{ .Values.ports.envoy.port }}
-  
+    {{ else }}
+    targetPort: {{ .Values.ports.nginx.nginxTargetPort }}
+    {{ end }}

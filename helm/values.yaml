@@ -38,7 +38,7 @@ route:
 
 authentication:
   opa:
-    enabled: true
+    enabled: false
     customHeaderName: 'x-api-key'
 
 ports:
