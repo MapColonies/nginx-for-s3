@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-configmap
+  labels:
+    component: configmap
+    environment: {{ .Values.environment }}
+    release: {{ .Release.Name }}
+data:
+  NGINX_CONFIG: {{ tpl (.Files.Get "config/nginx.conf") . | quote }}
+  NGINX_ROOT_CONFIG: {{ .Files.Get "config/nginx_root.conf" | quote }}

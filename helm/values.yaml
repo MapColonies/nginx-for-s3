@@ -1,5 +1,12 @@
 # Name of the image tu pull from registry
-image: acrarolibotnonprod.azurecr.io/nginx-for-s3:v1.1.0
+image: acrarolibotnonprod.azurecr.io/nginx
+imageTag: nginx-env-sub
+pullSecretName: acr-registry
+imagePullPolicy: IfNotPresent
+cloudProvider: azure
+resourceType: 3d
+environment: development
+replicaCount: 1
 
 ingress:
   enabled: false
@@ -45,11 +52,11 @@ ports:
   deployment: 8080
   nginx:
     port: 80
-    nginxTargetPort: 8080
+    targetPort: 8080
   opa: 
     port: 9191
   envoy: 
-    port: 8081
+    port: 8081 # 8000
 
 opa:
   image: openpolicyagent/opa
@@ -59,3 +66,7 @@ envoy:
   image: envoyproxy/envoy
   imageTag: v1.18.3
   maxRequestBytes: 8192
+
+probe:
+  initialDelaySeconds: 30
+  timeoutSeconds: 1
