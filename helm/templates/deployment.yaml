@@ -16,47 +16,8 @@ spec:
         {{ $key }}: {{ tpl $val $ | quote }}
       {{- end }}
     spec:
-      imagePullSecrets:
-        - name: {{ .Values.pullSecretName }}
-      volumes:
-      {{- if .Values.authentication.opa.enabled }}
-      {{- template "nginx-for-s3.envoy-volumes" . }}
-      {{- template "nginx-for-s3.opa-volumes" . }}
-      {{- end}}
-        - name: nginx-root-config
-          configMap:
-            name: {{ .Release.Name }}-{{ .Chart.Name }}-configmap
-            items:
-            - key: "NGINX_ROOT_CONFIG"
-              path: "nginx.conf"
-        - name: nginx-config
-          configMap:
-            name: {{ .Release.Name }}-{{ .Chart.Name }}-configmap
-            items:
-            - key: "NGINX_CONFIG"
-              path: "nginx.conf"
       containers:
         - name: {{ .Release.Name }}-{{ .Chart.Name }}-container
-          image: "{{ .Values.image }}:{{ .Values.imageTag}}"
-          imagePullPolicy: {{ .Values.imagePullPolicy }}
-          volumeMounts:
-          - name: nginx-config
-            mountPath: "/etc/nginx/conf.d"
-            readOnly: true
-          - name: nginx-root-config
-            mountPath: "/etc/nginx/nginx.conf"
-            subPath: nginx.conf
-            readOnly: true
-          ports:
-            - name: http
-              containerPort: {{ .Values.ports.nginx.targetPort }}
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /liveness
-              port: {{ .Values.ports.nginx.targetPort }}
-            initialDelaySeconds: {{ .Values.probe.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.probe.timeoutSeconds }}
           env:
           - name: S3_HOST
             value: {{ tpl .Values.s3.host . | quote }}
@@ -68,7 +29,16 @@ spec:
             value: {{ tpl .Values.s3.secretKey . | quote }}
           - name: HEADER_TOKEN
             value: {{ tpl .Values.authentication.opa.customHeaderName . | quote }}
+          image: "{{ .Values.image }}:{{ .Values.imageTag}}"
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          ports:
+          - containerPort: {{ .Values.ports.nginx.targetPort }}
         {{- if .Values.authentication.opa.enabled }}
         {{- template "nginx-for-s3.envoy-container" . }}
         {{- template "nginx-for-s3.opa-container" . }}
         {{- end}}
+      volumes:
+      {{- if .Values.authentication.opa.enabled }}
+      {{- template "nginx-for-s3.envoy-volumes" . }}
+      {{- template "nginx-for-s3.opa-volumes" . }}
+      {{- end}}

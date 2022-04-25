@@ -20,7 +20,7 @@ payload = payload {
 }
 
 user_has_resource_access[payload] {
-  lower(payload.resourceTypes[_]) = {{ .Values.resourceType | lower | quote }}
+  lower(payload.resourceTypes[_]) = {{ .Values.authentication.opa.resourceType | lower | quote }}
 }
 
 valid_origin[payload] {

@@ -1,9 +1,7 @@
 # nginx-for-s3
-
 A reverse proxy server for S3.
 
 ## Run:
-
 ```
 docker build -t foo .
 docker run \
@@ -17,9 +15,7 @@ docker run \
 docker ps
 docker exec -i -t foo /bin/sh
 ```
-
 ## Clean:
-
 ```
 docker stop foo
 docker ps -a

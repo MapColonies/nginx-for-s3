@@ -10,24 +10,22 @@
           - "--server"
           - "--addr=0.0.0.0:8181"
           - "--diagnostic-addr=0.0.0.0:8282"
-          - "--set=plugins.envoy_ext_authz_grpc.add=:9191"
+          - "--set=plugins.envoy_ext_authz_grpc.add=:{{ .Values.ports.opa.port }}"
           - "--set=plugins.envoy_ext_authz_grpc.path=envoy/authz/allow"
-          {{- if .Values.opa.enableLogging }}
           - "--set=decision_logs.console=true"
-          {{- end }}
           - "/policy/policy.rego"
-          livenessProbe:
-            httpGet:
-              path: /health?plugins
-              port: 8282
-            initialDelaySeconds: 5
-            periodSeconds: 30
-          readinessProbe:
-            httpGet:
-              path: /health?plugins
-              port: 8282
-            initialDelaySeconds: 5
-            periodSeconds: 30
+          # livenessProbe:
+          #   httpGet:
+          #     path: /health?plugins=true
+          #     port: 8282
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 5
+          # readinessProbe:
+          #   httpGet:
+          #     path: /health?plugins=true
+          #     port: 8282
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 5
 {{- end }}
 
 {{- define "nginx-for-s3.opa-volumes" }}

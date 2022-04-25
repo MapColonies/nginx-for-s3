@@ -13,6 +13,9 @@
             - name: http
               containerPort: {{ .Values.ports.envoy.port }}
               protocol: TCP
+            - name: admin
+              containerPort: {{ .Values.ports.envoy.port }}
+              protocol: TCP
           # livenessProbe:
           #   httpGet:
           #     path: /ready

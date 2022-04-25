@@ -1,21 +1,17 @@
+{{ $targetPort := ternary .Values.ports.envoy.port .Values.ports.nginx.nginxTargetPort .Values.authentication.opa.enabled }}
+
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Release.Name }}-{{ .Chart.Name }}-service
 spec:
-  # In case cloudProavider=azure
-  {{- if eq .Values.cloudProvider "azure" }}
-  type: ClusterIP
-  {{- end }}
-  # In case cloudProvider=minikube
-  {{- if eq .Values.cloudProvider "minikube" }}
-  type: NodePort
-  {{- end }}
+  selector:
+    podName: {{ .Release.Name }}-{{ .Chart.Name }}-pod
   ports:
-    - protocol: TCP
-      port: {{ .Values.ports.nginx.port }}
-      {{ if .Values.authentication.opa.enabled }}
-      targetPort: {{ .Values.ports.envoy.port }}
-      {{ else }}
-      targetPort: {{ .Values.ports.nginx.targetPort }}
-      {{ end }}
+  - protocol: TCP
+    port: {{ .Values.ports.nginx.port }}
+    {{ if .Values.authentication.opa.enabled }}
+    targetPort: {{ .Values.ports.envoy.port }}
+    {{ else }}
+    targetPort: {{ .Values.ports.nginx.nginxTargetPort }}
+    {{ end }}

@@ -9,8 +9,7 @@ metadata:
   {{- end }}
 spec:
   rules:
-  - host: {{ .Values.ingress.host | quote }}
-    http:
+  - http:
       paths:
       - path: {{ .Values.ingress.path | default (print "/" .Release.Name "/" .Chart.Name "/") }}
         pathType: Prefix
@@ -19,4 +18,7 @@ spec:
             name: {{ .Release.Name }}-{{ .Chart.Name }}-service
             port:
               number: {{ .Values.ports.nginx.targetPort }}
+    {{- if .Values.ingress.host }}
+    host: {{ .Values.ingress.host | quote }}
+    {{ end }}
 {{ end }}
