@@ -1,5 +1,9 @@
 # Name of the image tu pull from registry
-image: acrarolibotnonprod.azurecr.io/nginx-for-s3:v1.1.0
+image: acrarolibotnonprod.azurecr.io/nginx-for-s3
+imageTag: v1.2.0
+replicaCount: 1
+imagePullPolicy: Always
+
 
 ingress:
   enabled: false
@@ -38,14 +42,15 @@ route:
 
 authentication:
   opa:
-    enabled: false
+    enabled: true
     customHeaderName: 'x-api-key'
+    resourceType: '3d'
 
 ports:
   deployment: 8080
   nginx:
     port: 80
-    nginxTargetPort: 8080
+    targetPort: 8080
   opa: 
     port: 9191
   envoy: 

@@ -1,6 +1,6 @@
 {{- define "nginx-for-s3.envoy-container" }}
         - name: envoy
-          image: envoyproxy/envoy:v1.18.3
+          image: "{{ .Values.envoy.image }}:{{ .Values.envoy.imageTag }}"
           volumeMounts:
           - readOnly: true
             mountPath: /config
@@ -14,7 +14,7 @@
               containerPort: {{ .Values.ports.envoy.port }}
               protocol: TCP
             - name: admin
-              containerPort: 8001
+              containerPort: {{ .Values.ports.envoy.port }}
               protocol: TCP
           # livenessProbe:
           #   httpGet:

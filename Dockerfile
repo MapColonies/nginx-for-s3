@@ -7,8 +7,6 @@ ADD ./templates /etc/nginx/templates
 RUN chmod g+rwx /var/cache/nginx /var/run /var/log/nginx
 RUN chgrp -R root /var/cache/nginx
 
-EXPOSE 8080
-
 ADD ./nginx.conf /etc/nginx/nginx.conf
 
 RUN chmod -R g=u /etc/nginx/conf.d 
