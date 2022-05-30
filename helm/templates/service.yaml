@@ -13,5 +13,5 @@ spec:
     {{ if .Values.authentication.opa.enabled }}
     targetPort: {{ .Values.ports.envoy.port }}
     {{ else }}
-    targetPort: {{ .Values.ports.nginx.nginxTargetPort }}
+    targetPort: {{ .Values.ports.nginx.targetPort }}
     {{ end }}
