@@ -44,7 +44,7 @@ authentication:
   opa:
     enabled: true
     customHeaderName: 'x-api-key'
-    resourceType: '3d'
+    domains: '3d'
 
 ports:
   deployment: 8080

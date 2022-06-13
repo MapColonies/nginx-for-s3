@@ -27,7 +27,7 @@ payload = payload {
 
 ### Resources Access ###
 user_has_resource_access[payload] {
-  lower(payload.resourceTypes[_]) = {{ .Values.authentication.opa.resourceType | lower | quote }}
+  lower(payload.d[_]) = {{ .Values.authentication.opa.domains | lower | quote }}
 }
 ### Resources Access ###
 
@@ -48,7 +48,7 @@ valid_origin[payload] {
 }
 ### ORIGIN ###
 
-# allow authenticated acess
+# allow authenticated access
 allow {
   valid_origin[payload]
   user_has_resource_access[payload]
